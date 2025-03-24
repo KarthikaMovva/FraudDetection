@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function SignupPage() {
   const [name, setName] = useState("");
@@ -8,25 +9,33 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const handleSignup = (eve: React.FormEvent<HTMLFormElement>) => {
-    eve.preventDefault();
-    console.log("Name:", name);
-    console.log("Email:", email);
-    console.log("Password:", password);
-    setName("");
-    setEmail("");
-    setPassword("");
+  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:3003/register", {
+        username: email,
+        password: password,
+      });
+      console.log("Login Success:", response.data);
+      alert("Login successful!");
+      localStorage.setItem("token", response.data.token);
+      router.push("/dashboard");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error("Login Error:", error.response?.data?.message || error.message);
+        alert(error.response?.data?.message || "Login failed");
+      } else {
+        console.error("Unexpected error:", error);
+        alert("An unexpected error occurred");
+      }
+    }
   };
+  
 
   return (
     <div className="flex items-center justify-center h-screen bg-gradient-to-r from-green-500 to-blue-500">
-      <form
-        onSubmit={handleSignup}
-        className="bg-white p-8 rounded-2xl shadow-xl w-96"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">
-          Sign Up
-        </h2>
+      <form onSubmit={handleSignup} className="bg-white p-8 rounded-2xl shadow-xl w-96">
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">Sign Up</h2>
         <div className="mb-4">
           <label className="block text-gray-600 mb-2">Name</label>
           <input
@@ -61,14 +70,15 @@ export default function SignupPage() {
           />
         </div>
         <p className="mt-4 text-center text-gray-600 mb-5">
-  Already have an account?{" "}
-  <button
-    className="text-green-500 underline"
-    onClick={() => router.push("/login")}
-  >
-    Login
-  </button>
-</p>
+          Already have an account?{" "}
+          <button
+            type="button"
+            className="text-green-500 underline"
+            onClick={() => router.push("/login")}
+          >
+            Login
+          </button>
+        </p>
         <button
           type="submit"
           className="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-semibold transition-all"
