@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from 'next/navigation';
 
 export default function AddFraudApp() {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ export default function AddFraudApp() {
     risk_level: "",
     reported_on: "",
   });
+  const router = useRouter();
 
   const handleChange = (e: React.FormEvent<HTMLFormElement>) => {
     setFormData((prev) => ({
@@ -32,6 +34,7 @@ export default function AddFraudApp() {
         risk_level: "",
         reported_on: "",
       });
+      router.push("/dashboard")
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong!", { position: "top-right" });

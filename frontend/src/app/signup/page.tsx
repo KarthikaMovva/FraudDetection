@@ -13,17 +13,17 @@ export default function SignupPage() {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:3003/register", {
-        username: email,
+        username: name,
         password: password,
       });
-      console.log("Login Success:", response.data);
-      alert("Login successful!");
+      console.log("Register Success:", response.data);
+      alert("Register successful!");
       localStorage.setItem("token", response.data.token);
       router.push("/dashboard");
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error("Login Error:", error.response?.data?.message || error.message);
-        alert(error.response?.data?.message || "Login failed");
+        console.error("Rgister Error:", error.response?.data?.message || error.message);
+        alert(error.response?.data?.message || "Register failed");
       } else {
         console.error("Unexpected error:", error);
         alert("An unexpected error occurred");

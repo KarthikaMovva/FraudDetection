@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose=require('mongoose');
 
 const FraudAppSchema = new mongoose.Schema({
   app_name: { type: String, required: true },
@@ -12,4 +12,5 @@ const FraudAppSchema = new mongoose.Schema({
 
 const FraudApp = mongoose.model('FraudApp', FraudAppSchema);
 
-export default FraudApp;
+
+module.exports=FraudApp;

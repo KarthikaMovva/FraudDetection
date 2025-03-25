@@ -2,7 +2,8 @@ const express = require('express');
 const dotenv=require('dotenv');
 const mongoose = require('mongoose');
 const authRoutes = require('./Routes/auth');
-const AppRoutes=require('./Routes/AppRoutes')
+const AppRoutes=require('./Routes/AppRoutes');
+const UrlRoutes=require('./Routes/Urls');
 const cors=require('cors');
 const app = express();
 
@@ -17,6 +18,7 @@ mongoose.connect(DATABASE_URL)
 app.use(express.json());
 app.use('/', authRoutes);
 app.use('/',AppRoutes);
+app.use('/',UrlRoutes);
 app.use(cors({origin:"*"}));
 
 app.get('/', (req, res) => {
